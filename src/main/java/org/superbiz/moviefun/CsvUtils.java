@@ -2,19 +2,29 @@ package org.superbiz.moviefun;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class CsvUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(CsvUtils.class);
     public static String readFile(String path) {
         try {
-            Scanner scanner = new Scanner(new File(path)).useDelimiter("\\A");
+            logger.info("path++++++++++:" + path);
+            ClassLoader classLoader = CsvUtils.class.getClassLoader();
+            InputStream is = classLoader.getResourceAsStream(path);
+            Scanner scanner = new Scanner(is).useDelimiter("\\A");
 
             if (scanner.hasNext()) {
                 return scanner.next();
@@ -22,7 +32,7 @@ public class CsvUtils {
                 return "";
             }
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
