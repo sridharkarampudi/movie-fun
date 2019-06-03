@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.superbiz.moviefun.blobstore.Blob;
 import org.superbiz.moviefun.blobstore.BlobStore;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -28,12 +30,19 @@ public class AlbumsController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AlbumsBean albumsBean;
     private final BlobStore blobStore;
+    private  JdbcTemplate jdbcTemplate;
 
-    public AlbumsController(AlbumsBean albumsBean, BlobStore blobStore) {
+    public AlbumsController(AlbumsBean albumsBean, BlobStore blobStore, DataSource dataSource) {
         this.albumsBean = albumsBean;
         this.blobStore = blobStore;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @GetMapping("/setupCreate")
+    public String setupDB() {
+        jdbcTemplate.execute("CREATE TABLE album_scheduler_task (started_at TIMESTAMP NULL DEFAULT NULL)");
+        return"1";
+    }
 
     @GetMapping
     public String index(Map<String, Object> model) {
