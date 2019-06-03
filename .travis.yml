@@ -14,4 +14,4 @@ jobs:
        - sudo apt-get install cf-cli
        - cf install-plugin -r "CF-Community" mysql-plugin -f
        - curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-commandline-5.1.1-linux-x64.tar.gz | tar xvz
-       - flyway-*/flyway -url="jdbc:mysql://q-n3s3y1.q-g3204.bosh:3306/service_instance_db?user=8b27eb8159da43839bc17760e9233d52\u0026password=r3cx6yo7uzt8604v\u0026useSSL=false" -locations=filesystem:db clean migrate
+       - flyway-*/flyway -url="jdbc:mysql://q-n3s3y1.q-g3204.bosh:3306/service_instance_db?user=8b27eb8159da43839bc17760e9233d52\u0026password=r3cx6yo7uzt8604v\u0026useSSL=false" -locations=filesystem:db -user=8b27eb8159da43839bc17760e9233d52 -password=r3cx6yo7uzt8604v clean migrate
